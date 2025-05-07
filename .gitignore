@@ -1,0 +1,54 @@
+# Dependencies
+node_modules/
+.yarn/
+.pnp
+.pnp.js
+
+# Testing
+coverage/
+.nyc_output/
+
+# Production
+build/
+*.log
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build
+.next/
+.out/
+
+# Solana
+.anchor
+.target
+target/
+**/*.rs.bk
+test-ledger/
+
+# Debug
+*.log
+validator.log
+
+# Misc
+*.pem
+*.key
+*.crt
+*.der
+*.p12
+*.pfx
+*.jks
