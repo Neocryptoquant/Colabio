@@ -5,17 +5,17 @@ import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
  * Solana network configuration
  * Currently set to Devnet for development
  */
-export const network = WalletAdapterNetwork.Devnet;
+export const network: WalletAdapterNetwork = WalletAdapterNetwork.Devnet;
 
 /**
  * RPC endpoint URL for Solana network
  */
-export const endpoint = clusterApiUrl(network);
+export const endpoint: string = clusterApiUrl(network);
 
 /**
  * Solana connection instance with optimized configuration
  */
-export const connection = new Connection(endpoint, {
+export const connection: Connection = new Connection(endpoint, {
   commitment: 'confirmed',
   confirmTransactionInitialTimeout: 30000, // 30 seconds
 });
@@ -24,12 +24,12 @@ export const connection = new Connection(endpoint, {
  * Program ID for the Colabio crowdfunding program
  * This should match the program ID from Anchor.toml
  */
-export const PROGRAM_ID = new PublicKey('871mFBQrG5nUgZppc6BmdNnFmYvDRu6ixEQhKwfSS95j');
+export const PROGRAM_ID: PublicKey = new PublicKey('DSU6vAdyoNZwuQFPY4fenDuFtycxf615Pu2jXME9DDzp');
 
 /**
  * Helper function to get the program ID as a string
  */
-export const getProgramIdString = () => {
+export function getProgramIdString(): string {
   try {
     return PROGRAM_ID.toString();
   } catch (error) {
