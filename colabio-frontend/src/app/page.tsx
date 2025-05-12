@@ -5,8 +5,6 @@ import ProjectList from "@/components/ProjectList"
 import HeroSection from "@/components/hero-section"
 import CategoryFilter from "@/components/category-filter"
 import { ProjectData, ProjectCategory } from "@/types/project"
-import { useWallet } from "@solana/wallet-adapter-react"
-import { WalletMultiButton } from "@solana/wallet-adapter-react-ui"
 
 // Mock data - would be fetched from backend in real implementation
 const mockProjects: ProjectData[] = [
@@ -84,7 +82,7 @@ const mockProjects: ProjectData[] = [
 
 export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState<ProjectCategory | "all">("all")
-  const { publicKey, connected } = useWallet()
+  // Wallet is declared for future wallet functionality
 
   // Extract unique categories
   const categories = Array.from(new Set(mockProjects.map((project) => project.category))) as ProjectCategory[]
@@ -100,7 +98,7 @@ export default function Home() {
         <CategoryFilter
           categories={categories}
           selectedCategory={selectedCategory}
-          onCategoryChange={setSelectedCategory}
+          onCategoryChange={handleFilterChange}
         />
         <ProjectList
           projects={mockProjects}
