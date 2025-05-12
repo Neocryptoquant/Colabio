@@ -1,8 +1,10 @@
+'use client'
+
 import { useState } from "react"
-import ProjectList from "@/components/project-list"
+import ProjectList from "@/components/ProjectList"
 import HeroSection from "@/components/hero-section"
 import CategoryFilter from "@/components/category-filter"
-import type { ProjectData } from "@/types/project"
+import { ProjectData, ProjectCategory } from "@/types/project"
 import { useWallet } from "@solana/wallet-adapter-react"
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui"
 
@@ -81,18 +83,14 @@ const mockProjects: ProjectData[] = [
 ]
 
 export default function Home() {
-  const [selectedCategory, setSelectedCategory] = useState<string>("all")
+  const [selectedCategory, setSelectedCategory] = useState<ProjectCategory | "all">("all")
   const { publicKey, connected } = useWallet()
 
   // Extract unique categories
-  const categories = Array.from(new Set(mockProjects.map((project) => project.category)))
+  const categories = Array.from(new Set(mockProjects.map((project) => project.category))) as ProjectCategory[]
 
-  const handleFilterChange = (category: string | null) => {
-    if (category === null) {
-      // setFilteredProjects(mockProjects)
-    } else {
-      // setFilteredProjects(mockProjects.filter((project) => project.category === category))
-    }
+  const handleFilterChange = (category: ProjectCategory | "all") => {
+    setSelectedCategory(category);
   }
 
   return (

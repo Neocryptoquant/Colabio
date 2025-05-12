@@ -1,15 +1,23 @@
+'use client';
+
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "../../components/ui/button";
+import { Input } from "../../components/ui/input";
+import { Textarea } from "../../components/ui/textarea";
+import { Label } from "../../components/ui/label";
+import { Card, CardContent } from "../../components/ui/card";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../components/ui/select";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useConnection } from "@solana/wallet-adapter-react";
 import { toast } from "react-hot-toast";
-import { PROGRAM_ID } from "@/config/solana";
-import { Transaction, SystemProgram, createInstruction, PublicKey } from "@solana/web3.js";
-import { useRouter } from "next/router";
+import { PROGRAM_ID } from "../../config/solana";
+import { Transaction, SystemProgram, PublicKey, SYSVAR_RENT_PUBKEY } from "@solana/web3.js";
+import { useRouter } from "next/navigation";
+import { createInstruction } from "../../utils/instructions";
+import { ProjectCategory } from "../../types/project";
+
+const validCategories: ProjectCategory[] = ['DeFi', 'NFT', 'Social', 'Education', 'Other'] as const;
+
 
 export default function CreateProject() {
   const { publicKey, sendTransaction } = useWallet();
@@ -20,11 +28,23 @@ export default function CreateProject() {
     title: "",
     shortDescription: "",
     fullDescription: "",
-    category: "DeFi",
+    category: "DeFi" as ProjectCategory,
     goalAmount: "",
+  } as {
+    title: string;
+    shortDescription: string;
+    fullDescription: string;
+    category: ProjectCategory;
+    goalAmount: string;
   });
 
-  const [errors, setErrors] = useState({
+  const [errors, setErrors] = useState<{
+    title: string;
+    shortDescription: string;
+    fullDescription: string;
+    category: string;
+    goalAmount: string;
+  }>({
     title: "",
     shortDescription: "",
     fullDescription: "",
@@ -37,14 +57,20 @@ export default function CreateProject() {
       title: formData.title.length < 3 ? "Title must be at least 3 characters" : "",
       shortDescription: formData.shortDescription.length < 10 ? "Short description must be at least 10 characters" : "",
       fullDescription: formData.fullDescription.length < 20 ? "Full description must be at least 20 characters" : "",
-      category: formData.category === "" ? "Please select a category" : "",
+      category: !validCategories.includes(formData.category) ? "Please select a valid category" : "",
       goalAmount: !/^[0-9]+(\\.[0-9]+)?$/.test(formData.goalAmount) ? "Please enter a valid number" : "",
+    } as {
+      title: string;
+      shortDescription: string;
+      fullDescription: string;
+      category: string;
+      goalAmount: string;
     };
     setErrors(newErrors);
     return Object.values(newErrors).every(error => error === "");
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
     // Clear error for the changed field
@@ -95,11 +121,14 @@ export default function CreateProject() {
             creator: publicKey,
             project: projectPda,
             projectEscrow: projectEscrowPda,
-            systemProgram: SystemProgram.programId
+            systemProgram: SystemProgram.programId,
+            rent: SYSVAR_RENT_PUBKEY
           },
           {
             fundingGoal: goalAmountLamports,
-            description: formData.fullDescription,
+            title: formData.title,
+            shortDescription: formData.shortDescription,
+            fullDescription: formData.fullDescription,
             category: formData.category
           }
         )
@@ -132,7 +161,7 @@ export default function CreateProject() {
       formData.title.length >= 3 &&
       formData.shortDescription.length >= 10 &&
       formData.fullDescription.length >= 20 &&
-      formData.category !== "" &&
+      validCategories.includes(formData.category) &&
       /^[0-9]+(\\.[0-9]+)?$/.test(formData.goalAmount)
     );
   };
@@ -196,11 +225,11 @@ export default function CreateProject() {
             onChange={handleChange}
             className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
-            <option value="DeFi">DeFi</option>
-            <option value="NFT">NFT</option>
-            <option value="Social">Social</option>
-            <option value="Education">Education</option>
-            <option value="Other">Other</option>
+            {validCategories.map((category) => (
+              <option key={category} value={category}>
+                {category}
+              </option>
+            ))}
           </select>
           {errors.category && (
             <p className="text-red-500 text-sm mt-1">{errors.category}</p>

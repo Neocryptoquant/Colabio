@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useState, useEffect } from 'react';
 import { ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react';
 import { WalletModalProvider } from '@solana/wallet-adapter-react-ui';
@@ -9,8 +11,6 @@ import { network, endpoint } from '@/config/solana';
 interface WalletConnectionProps {
   children: React.ReactNode;
 }
-
-"use client"
 
 export const WalletConnection = ({ children }: WalletConnectionProps): JSX.Element => {
   // Using configuration from config file

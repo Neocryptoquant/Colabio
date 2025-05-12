@@ -1,3 +1,6 @@
+export type ProjectCategory = 'DeFi' | 'NFT' | 'Social' | 'Education' | 'Other';
+export type CategoryFilter = ProjectCategory | 'all';
+
 export interface ProjectData {
   /** Unique identifier for the project */
   id: string;
@@ -10,7 +13,7 @@ export interface ProjectData {
   /** Public key of the project creator */
   creatorAddress: string;
   /** Project category (e.g., DeFi, NFT, Infrastructure) */
-  category: string;
+  category: ProjectCategory;
   /** URL to the project's image */
   imageUrl: string;
   /** Goal amount in SOL */
@@ -27,17 +30,18 @@ export interface ProjectData {
 
 export interface CategoryFilterProps {
   /** List of available categories */
-  categories: string[];
+  categories: ProjectCategory[];
   /** Currently selected category */
-  selectedCategory: string;
+  selectedCategory: ProjectCategory | "all";
   /** Callback when category selection changes */
-  onCategoryChange: (category: string) => void;
+  onCategoryChange: (category: ProjectCategory | "all") => void;
 }
 
 export interface ProjectListProps {
   /** List of projects to display */
   projects: ProjectData[];
   /** Currently selected category for filtering */
-  selectedCategory?: string;
-  selectedCategory: string;
+  selectedCategory: ProjectCategory | "all";
+  /** Callback when category selection changes */
+  onCategoryChange: (category: ProjectCategory | "all") => void;
 }

@@ -1,17 +1,11 @@
 "use client"
 
-import { useState } from "react"
 import { Button } from "@/components/ui/button"
-
-import { CategoryFilterProps } from "@/types/project"
+import { CategoryFilterProps, ProjectCategory } from "@/types/project"
 
 export default function CategoryFilter({ categories, selectedCategory, onCategoryChange }: CategoryFilterProps) {
-  const handleCategoryClick = (category: string) => {
-    if (selectedCategory === category) {
-      onCategoryChange("all")
-    } else {
-      onCategoryChange(category)
-    }
+  const handleCategoryClick = (category: ProjectCategory | "all") => {
+    onCategoryChange(category)
   }
 
   return (
