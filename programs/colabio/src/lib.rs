@@ -2,7 +2,7 @@ use anchor_lang::prelude::*;
 use anchor_lang::system_program::{self, Transfer}; // Import Transfer for SOL transfer
 
 // Replace with your program's actual ID after first build/deploy
-declare_id!("2QkJLTKTtYFHS6xir1TEXLSdajM7r1Djf96JogKnRGSR");
+declare_id!("DSU6vAdyoNZwuQFPY4fenDuFtycxf615Pu2jXME9DDzp");
 
 #[program]
 pub mod colabio {
